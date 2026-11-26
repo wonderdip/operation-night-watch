@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://cpltnaxfbbyh7"]
+
+[ext_resource type="Script" uid="uid://bd1hf3q2rko8i" path="res://Scripts/player.gd" id="1_v0iea"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_awwja"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_awwja"]
+
+[node name="Player" type="CharacterBody3D" unique_id=1819818231 node_paths=PackedStringArray("cam", "head")]
+script = ExtResource("1_v0iea")
+cam = NodePath("HeadPivot/Camera3D")
+head = NodePath("HeadPivot")
+bob_freq = 1.7
+bob_amp = 0.15
+fov_multiplier = 10
+acceleration = 20.0
+deceleration = 200.0
+JUMP_VELOCITY = 10.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2141143256]
+mesh = SubResource("CapsuleMesh_awwja")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1626427897]
+shape = SubResource("CapsuleShape3D_awwja")
+
+[node name="HeadPivot" type="Node3D" parent="." unique_id=1054087621]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5733464, 0)
+
+[node name="Camera3D" type="Camera3D" parent="HeadPivot" unique_id=1158235130]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00048702955, -0.31428957)
+current = true
