@@ -169,7 +169,7 @@ func handle_headbob(delta: float) -> void:
 	# Only update headbob time when moving and on floor
 	if horizontal_speed > 0.1 and is_on_floor():
 		# Normalize the speed for headbob calculation - this prevents crazy fast bobbing
-		var normalized_speed = sqrt(horizontal_speed) * 2.0  # Square root dampening + scaling
+		var normalized_speed = sqrt(horizontal_speed) * 2
 		t_bob += delta * normalized_speed * float(is_on_floor())
 	else:
 		# Gradually reduce headbob when stopping
@@ -177,9 +177,7 @@ func handle_headbob(delta: float) -> void:
 	
 	# Calculate separate headbob offsets
 	camera_headbob_offset = camera_headbob(t_bob, horizontal_speed)
-	
-	# Apply to camera and gun
-	cam.transform.origin = camera_headbob_offset + shake_offset
+	cam.position = camera_headbob_offset + shake_offset
 
 # --------- Camera Headbob Function ---------
 func camera_headbob(time: float, speed: float) -> Vector3:
@@ -188,7 +186,7 @@ func camera_headbob(time: float, speed: float) -> Vector3:
 	if speed > 0.1:
 		# Normalize speed for amplitude calculation to prevent extreme bobbing
 		var speed_factor = sqrt(speed) / sqrt(max_speed)  # Square root normalization
-		speed_factor = clamp(speed_factor, 0.3, 1.5)  # Keep reasonable range
+		speed_factor = clamp(speed_factor, 0.3, 2)  # Keep reasonable range
 		
 		pos.y = sin(time * bob_freq) * bob_amp * speed_factor
 		pos.x = cos(time * bob_freq / 2) * bob_amp * speed_factor
@@ -203,7 +201,7 @@ func handle_fov(delta: float) -> void:
 	speed_factor = clamp(speed_factor, 0.0, 2.0)  # Cap the FOV multiplier
 	
 	# Increase FOV for sprinting
-	var sprint_factor = 1.5 if Input.is_action_pressed("sprint") else 1.0
+	var sprint_factor = sprint_multiplier if Input.is_action_pressed("sprint") else 1.0
 	var target_fov = Base_FOV + FOV_multiplier * speed_factor * sprint_factor
 	
 	cam.fov = lerp(cam.fov, target_fov, delta * 10.0)
